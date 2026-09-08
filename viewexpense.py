@@ -1,15 +1,11 @@
 from InquirerPy import inquirer
 from addexpense import AddExpense
-import json
-import os
-
-filename = "expense.json"
 
 
 class ViewExpense(AddExpense):
     """
-    Inherits from AddExpense. This allows ViewExpense to access 'self.expenses'
-    and all methods from AddExpense, while adding viewing, updating, and deleting.
+    Inherits from AddExpense. This allows ViewExpense to access 'self.expenses',
+    'self.save_expenses()', and 'self.load_expenses()', while adding viewing, updating, and deleting.
     """
 
     def view_expenses(self):
@@ -44,6 +40,7 @@ class ViewExpense(AddExpense):
     def prompt_update_expense(self):
         """
         Uses InquirerPy to let the user select an expense and choose which field to modify.
+        Saves updated data back to expense.json.
         """
         print("\n--- Update Expense ---")
 
@@ -52,7 +49,6 @@ class ViewExpense(AddExpense):
             return
 
         # Build list of options for inquirer.select
-        # Each choice has a 'name' (displayed text) and a 'value' (index in self.expenses)
         choices = [
             {
                 "name": f"#{i + 1} | {exp.category} | ${exp.amount:.2f} | {exp.description}",
@@ -128,15 +124,14 @@ class ViewExpense(AddExpense):
             ).execute()
             target.description = new_description
 
-        print("\n[OK] Expense updated successfully!\n")
-
-        if not os.path.exists(filename):
-            with open(filename, "w") as f:
-                json.dump([], f)
+        # Save the updated list to expense.json
+        self.save_expenses()
+        print("\n[OK] Expense updated and saved successfully!\n")
 
     def prompt_delete_expense(self):
         """
         Uses InquirerPy to let the user pick an expense to delete, with confirmation prompt.
+        Saves updated data back to expense.json.
         """
         print("\n--- Delete Expense ---")
 
@@ -172,6 +167,8 @@ class ViewExpense(AddExpense):
 
         if confirmed:
             removed = self.expenses.pop(selected_idx)
+            # Persist changes to expense.json after deletion
+            self.save_expenses()
             print(
                 f"\n[OK] Successfully deleted: {removed.category} (${removed.amount:.2f})\n"
             )

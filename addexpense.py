@@ -8,33 +8,51 @@ filename = "expense.json"
 
 class AddExpense:
     """
-    Manages the expense collection and provides methods to add new expenses.
-    Notice: AddExpense does NOT need to inherit from Expense because an 'expense manager'
-    HAS expenses (composition), rather than BEING an expense itself (inheritance).
+    Manages the expense collection and provides methods to add, save, and load expenses.
     """
 
     def __init__(self):
         # self.expenses holds the list of all Expense instances
         self.expenses = []
+        # Automatically load any previously saved expenses from expense.json when the app starts
+        self.load_expenses()
+
+    def save_expenses(self):
+        """
+        Saves all expenses to expense.json.
+        We convert each Expense object to a dictionary using exp.to_dict() before saving.
+        """
+        data = [exp.to_dict() for exp in self.expenses]
+        with open(filename, "w") as f:
+            json.dump(data, f, indent=4)
+
+    def load_expenses(self):
+        """
+        Loads saved expenses from expense.json.
+        We convert each dictionary back into an Expense object using Expense.from_dict().
+        """
+        if not os.path.exists(filename):
+            return
+
+        try:
+            with open(filename, "r") as f:
+                data = json.load(f)
+                # Re-create Expense instances for each saved item
+                self.expenses = [Expense.from_dict(item) for item in data]
+        except (json.JSONDecodeError, KeyError):
+            # If the file is empty or corrupted, start with an empty list
+            self.expenses = []
 
     def add_expense(self, amount, category, description="No description"):
         """
-        Creates a new Expense object and adds it to the internal expenses list.
+        Creates a new Expense object, adds it to the list, and saves to JSON.
         """
         expense = Expense(amount, category, description)
         self.expenses.append(expense)
-        print("\n[OK] Expense added successfully!\n")
+        # Save to JSON immediately so data persists even if the app is closed
+        self.save_expenses()
+        print("\n[OK] Expense added and saved successfully!\n")
         return expense
-
-    def save_expenses(self):
-        with open(filename, "w") as f:
-            json.dump(self.expenses, f, indent=4)
-
-    def load_expenses(self):
-        if not os.path.exists(filename):
-            return
-        with open(filename, "r") as f:
-            self.expenses = json.load(f)
 
     def prompt_add_expense(self):
         """
@@ -46,8 +64,6 @@ class AddExpense:
         print("\n--- Add New Expense ---")
 
         # 1. Prompt for Amount using inquirer.number
-        # float_allowed=True lets users enter decimals (e.g., 25.50)
-        # min_allowed=0.01 prevents zero or negative amounts
         amount = inquirer.number(
             message="Enter amount ($):",
             float_allowed=True,
@@ -84,5 +100,5 @@ class AddExpense:
             default="No description",
         ).execute()
 
-        # Save the expense into self.expenses
+        # Save the expense into self.expenses and persist to JSON
         return self.add_expense(float(amount), category, description)
