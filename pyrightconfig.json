@@ -1,0 +1,10 @@
+{
+  "include": [
+    "."
+  ],
+  "venvPath": ".",
+  "venv": "myenv",
+  "extraPaths": [
+    "./myenv/Lib/site-packages"
+  ]
+}
