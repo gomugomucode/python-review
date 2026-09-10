@@ -29,7 +29,7 @@ txn_region = np.random.choice(region, size=num_transactions)
 # transaction amounts
 # we use exponential distribution to generate realistic transaction amounts
 # this ensures that there are a lot of small/medium transactions and a few massive premium orders
-#  in the below code we use scale 80 it mean the average transaction amount is 80
+#  in the below code we use scale 80 it mean the average transaction amount is 80  and added the base or minimum  price 10
 txn_amount = np.random.exponential(scale=80.0, size=num_transactions) + 10.0
 
 # inject some missing values in the transaction amounts
