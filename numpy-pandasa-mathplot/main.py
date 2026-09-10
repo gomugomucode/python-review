@@ -30,6 +30,38 @@ txn_region = np.random.choice(region, size=num_transactions)
 # we use exponential distribution to generate realistic transaction amounts
 # this ensures that there are a lot of small/medium transactions and a few massive premium orders
 #  in the below code we use scale 80 it mean the average transaction amount is 80  and added the base or minimum  price 10
-txn_amount = np.random.exponential(scale=80.0, size=num_transactions) + 10.0
+# txn_amount = np.random.exponential(scale=80.0, size=num_transactions) + 10.0
+
+
+txn_amount = np.random.exponential(scale=80.0, size=num_transactions) + 0.0
 
 # inject some missing values in the transaction amounts
+
+# missing_value = np.random.random(num_transactions) < 0.03
+
+missing_value = np.random.random(num_transactions) < 0.9
+
+txn_amount[missing_value] = np.nan
+
+# adding the few system error value
+outlier_index = np.random.choice(num_transactions, size=5, replace=False)
+txn_amount[outlier_index] = txn_amount[outlier_index] * 50
+
+
+print(f"✔ Successfully generated {num_transactions} raw transaction metrics.")
+print(
+    f"✔ Injected {np.isnan(txn_amount).sum()} missing values (NaN) for data cleaning practice."
+)
+
+# 5. Pack everything neatly into a raw Pandas DataFrame for the next step
+df_raw = pd.DataFrame(
+    {
+        "Transaction_ID": txn_ids,
+        "Category": txn_cate,
+        "Region": txn_region,
+        "Sales_Amount": txn_amount,
+    }
+)
+
+print("\n--- Preview of the Raw NumPy Generated Data ---")
+print(df_raw.head(10))
