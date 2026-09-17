@@ -4,7 +4,26 @@
   ],
   "venvPath": ".",
   "venv": "myenv",
+  "executionEnvironments": [
+    {
+      "root": "expense-tracker-cli",
+      "extraPaths": [
+        ".",
+        "../myenv/Lib/site-packages"
+      ]
+    },
+    {
+      "root": "numpy-pandas-matplotlib",
+      "extraPaths": [
+        ".",
+        "../myenv/Lib/site-packages"
+      ]
+    }
+  ],
   "extraPaths": [
-    "./myenv/Lib/site-packages"
-  ]
+    "./myenv/Lib/site-packages",
+    "./expense-tracker-cli",
+    "./numpy-pandas-matplotlib"
+  ],
+  "reportPrivateImportUsage": "none"
 }

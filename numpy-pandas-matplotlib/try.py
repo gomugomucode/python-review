@@ -35,9 +35,9 @@ tx_amounts[missing_mask] = np.nan
 outlier_indices = np.random.choice(num_transactions, size=5, replace=False)
 tx_amounts[outlier_indices] = tx_amounts[outlier_indices] * 50
 
-print(f"✔ Successfully generated {num_transactions} raw transaction metrics.")
+print(f"[OK] Successfully generated {num_transactions} raw transaction metrics.")
 print(
-    f"✔ Injected {np.isnan(tx_amounts).sum()} missing values (NaN) for data cleaning practice."
+    f"[OK] Injected {np.isnan(tx_amounts).sum()} missing values (NaN) for data cleaning practice."
 )
 
 # 5. Pack everything neatly into a raw Pandas DataFrame for the next step

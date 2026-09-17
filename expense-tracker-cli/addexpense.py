@@ -3,7 +3,8 @@ from expense import Expense
 import json
 import os
 
-filename = "expense.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+filename = os.path.join(BASE_DIR, "expense.json")
 
 
 class AddExpense:
