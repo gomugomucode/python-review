@@ -1,4 +1,4 @@
-﻿# Python Review Repository
+# Python Review Repository
 
 A structured repository containing practical Python projects, command-line applications, and data manipulation reviews.
 
@@ -17,8 +17,9 @@ python-review/
 ├── numpy-pandas-matplotlib/     # Data science & analytics practice
 │   ├── main.py                  # Synthetic transaction dataset generation (NumPy & Pandas)
 │   └── try.py                   # Data cleaning experiments (missing values, outliers)
+├── torch.ipynb                  # PyTorch & CUDA GPU acceleration verification & tests
 ├── pyrightconfig.json           # Python language server and path configuration
-├── requirements.txt             # Project dependencies
+├── requirements.txt             # Project dependencies (including PyTorch with CUDA 13.0)
 ├── .gitignore                   # Ignored files and environments
 └── README.md                    # Repository documentation
 ```
@@ -70,15 +71,30 @@ python numpy-pandas-matplotlib/try.py
 
 ---
 
+### 3. PyTorch & CUDA Acceleration (`torch.ipynb`)
+
+Jupyter notebook for verifying PyTorch installation, hardware acceleration, and GPU computing.
+
+- **Features**:
+  - Validates PyTorch environment, CUDA runtime build, and device count
+  - Detects dedicated NVIDIA GPU hardware (tested with **NVIDIA GeForce RTX 5050 Laptop GPU**)
+  - Configured with CUDA 13.0 (`cu130`) for native compatibility with NVIDIA Blackwell architecture (`sm_120`)
+  - Compares CPU vs. GPU tensor allocation and device management
+
+**How to Run:**
+Open [`torch.ipynb`](torch.ipynb) in VS Code or Jupyter Lab, select the `myenv` kernel, and run all cells.
+
+---
+
 ## 🛠️ Environment Setup & Installation
 
-1. **Prerequisites**: Python 3.8 or higher.
+1. **Prerequisites**: Python 3.10+ (tested on Python 3.12).
 
 2. **Create and activate a virtual environment**:
    ```bash
-   # Windows
+   # Windows (PowerShell)
    python -m venv myenv
-   .\myenv\Scripts\activate
+   .\myenv\Scripts\Activate.ps1
 
    # macOS / Linux
    python3 -m venv myenv
@@ -86,9 +102,14 @@ python numpy-pandas-matplotlib/try.py
    ```
 
 3. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+   - **For CPU-only or general libraries:**
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - **For NVIDIA GPU (CUDA 13.0) Acceleration:**
+     ```bash
+     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130
+     ```
 
 ---
 
@@ -96,3 +117,4 @@ python numpy-pandas-matplotlib/try.py
 
 - **`pyrightconfig.json`**: Configured to resolve package imports from both subproject folders (`expense-tracker-cli` and `numpy-pandas-matplotlib`) as well as the virtual environment.
 - **`.vscode/settings.json`**: Pre-configured Python interpreter and analysis paths for Visual Studio Code.
+- **CUDA Support**: Verified on Windows 11 with NVIDIA driver 610.88+ and RTX 50-series (Blackwell) GPU hardware.
